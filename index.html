@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Life Countdown</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #000;
+            color: #0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        #countdown {
+            font-size: 2em;
+        }
+        input {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 1em;
+        }
+        button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            font-size: 1em;
+            background-color: #0f0;
+            color: #000;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Life Countdown</h1>
+    <div id="countdown">Enter your life expectancy below</div>
+    <input type="number" id="lifeExpectancy" placeholder="Enter expected age (years)" />
+    <button onclick="startCountdown()">Start Countdown</button>
+
+    <script>
+        let timer;
+
+        function startCountdown() {
+            clearInterval(timer);
+            const expectancy = document.getElementById('lifeExpectancy').value;
+            if (!expectancy || expectancy <= 0) {
+                alert('Please enter a valid life expectancy in years.');
+                return;
+            }
+            const birthDate = new Date(prompt('Enter your birth date (yyyy-mm-dd):'));
+            if (birthDate.toString() === 'Invalid Date') {
+                alert('Invalid date entered.');
+                return;
+            }
+            const deathDate = new Date(birthDate);
+            deathDate.setFullYear(birthDate.getFullYear() + parseInt(expectancy));
+
+            timer = setInterval(() => {
+                const now = new Date();
+                const timeLeft = deathDate - now;
+
+                if (timeLeft <= 0) {
+                    document.getElementById('countdown').innerHTML = "Time's up!";
+                    clearInterval(timer);
+                    return;
+                }
+
+                const years = Math.floor(timeLeft / (1000 * 60 * 60 * 24 * 365));
+                const days = Math.floor((timeLeft % (1000 * 60 * 60 * 24 * 365)) / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                document.getElementById('countdown').innerHTML = 
+                    years + " years, " + days + " days, " + 
+                    hours + " hours, " + minutes + " minutes, " + 
+                    seconds + " seconds remaining";
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
